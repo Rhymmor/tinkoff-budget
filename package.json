@@ -27,11 +27,12 @@
   "homepage": "https://github.com/Rhymmor/tinkoff-budget#readme",
   "dependencies": {
     "fastify": "1.14.1",
-    "tinkoff-api": "0.0.2"
+    "tinkoff-api": "0.0.3"
   },
   "devDependencies": {
     "@types/node": "11.9.0",
     "tslint": "5.12.1",
+    "tslint-config-airbnb": "5.11.1",
     "typescript": "3.3.3"
   }
 }
