@@ -7,7 +7,9 @@ export class Server {
     constructor(port = '8000') {
         this.port = port;
         this.app = fastify({
-            logger: true
+            logger: {
+                prettyPrint: process.env.NODE_ENV !== 'production'
+            }
         });
     }
 
