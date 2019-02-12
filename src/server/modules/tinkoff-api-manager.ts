@@ -3,11 +3,21 @@ import { isOk } from '../lib/utils';
 import { ICredentials } from '../../lib/types/api';
 
 export class TinkoffApiManager {
+    public static get() {
+        if (!TinkoffApiManager.instance) {
+            TinkoffApiManager.instance = new TinkoffApiManager();
+        }
+        return TinkoffApiManager.instance;
+    }
+
+    private static instance: TinkoffApiManager;
     private api = new TinkoffApi();
+
+    private constructor() {}
 
     public async getSession(): Promise<string> {
         const res = await this.api.initializeSession();
-        return res.resultCode;
+        return res.payload;
     }
 
     public async singUp(credentials: ICredentials, session?: string): Promise<string> {

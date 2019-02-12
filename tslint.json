@@ -16,7 +16,8 @@
         "eofline": false,
         "ordered-imports": false,
         "align": false,
-        "object-curly-spacing": false
+        "object-curly-spacing": false,
+        "variable-name": [true, "ban-keywords", "check-format", "allow-leading-underscore"]
     },
     "rulesDirectory": []
 }
