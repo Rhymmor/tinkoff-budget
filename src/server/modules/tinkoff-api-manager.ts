@@ -1,5 +1,5 @@
 import {TinkoffApi, AccessLevel} from 'tinkoff-api';
-import { isOk } from '../lib/utils';
+import { isOk } from '../../lib/utils';
 import { ICredentials } from '../../lib/types/api';
 
 export class TinkoffApiManager {
