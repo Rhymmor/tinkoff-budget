@@ -17,7 +17,8 @@
         "ordered-imports": false,
         "align": false,
         "object-curly-spacing": false,
-        "variable-name": [true, "ban-keywords", "check-format", "allow-leading-underscore"]
+        "variable-name": [true, "ban-keywords", "check-format", "allow-leading-underscore"],
+        "indent": [true]
     },
     "rulesDirectory": []
 }

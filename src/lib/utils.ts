@@ -11,3 +11,7 @@ export function safeGet<TSrc, TResult>(source: TSrc, mapFunc: (v: TSrc) => TResu
         return defaultVal;
     }
 }
+
+export type UseKeys<K, T> = {
+    [keys in keyof K]: T;
+};
