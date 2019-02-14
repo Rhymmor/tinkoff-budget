@@ -14,6 +14,7 @@ export interface IValidationSchema {
     items?: IValidationSchema[];
     // objects
     properties?: Record<string, IValidationSchema>;
+    required?: string[];
 }
 
 export type ObjectKeysValidation<T> = Required<UseKeys<T, IValidationSchema>>;

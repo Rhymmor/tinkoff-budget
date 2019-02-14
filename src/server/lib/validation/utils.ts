@@ -1,8 +1,9 @@
 import { ObjectKeysValidation, IValidationSchema } from "./types";
 
-export function objectValidation<T>(properties: ObjectKeysValidation<T>): IValidationSchema {
+export function objectValidation<T>(properties: ObjectKeysValidation<T>, requiredKeys?: string[]): IValidationSchema {
     return {
         properties,
-        type: "object",
+        required: requiredKeys || Object.keys(properties),
+        type: "object"
     };
 }
