@@ -1,4 +1,3 @@
-
 export function isOk<T>(obj: T | undefined | null): obj is T {
     return obj !== undefined && obj !== null;
 }
@@ -12,6 +11,4 @@ export function safeGet<TSrc, TResult>(source: TSrc, mapFunc: (v: TSrc) => TResu
     }
 }
 
-export type UseKeys<K, T> = {
-    [keys in keyof K]: T;
-};
+export type UseKeys<K, T> = { [keys in keyof K]: T };
