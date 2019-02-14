@@ -1,6 +1,6 @@
-import {TinkoffApi, AccessLevel} from 'tinkoff-api';
-import { isOk } from '../../lib/utils';
-import { ICredentials } from '../../lib/types/api';
+import { TinkoffApi, AccessLevel } from "tinkoff-api";
+import { isOk } from "../../lib/utils";
+import { ICredentials } from "../../lib/types/api";
 
 export class TinkoffApiManager {
     public static get() {
@@ -31,7 +31,9 @@ export class TinkoffApiManager {
 
     public async confirmSignUp(session: string, ticketId: string, smsId: string): Promise<void> {
         await this.api.confirmSignUp(session, ticketId, smsId);
-        const {payload: {accessLevel}} = await this.api.levelUp(session);
+        const {
+            payload: { accessLevel }
+        } = await this.api.levelUp(session);
         if (accessLevel !== AccessLevel.CLIENT) {
             throw new Error(`Couldn't confirm session (${session}) - access level is ${accessLevel}`);
         }

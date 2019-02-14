@@ -1,4 +1,4 @@
-import { UseKeys } from "tinkoff-api/build/src/lib/util-types";
+import { UseKeys } from "../../../lib/utils";
 
 export interface IValidationSchema {
     type: string | string[];

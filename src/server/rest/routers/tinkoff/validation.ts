@@ -1,22 +1,31 @@
 import { ObjectKeysValidation } from "../../../lib/validation/types";
 import { IApiCommonQuery } from "../../../../lib/types/rest/tinkoff/common";
-import { IApiSignUpQuery, IApiSignUpBody } from "../../../../lib/types/rest/tinkoff/sign-up";
+import { ApiSignUpTypes } from "../../../../lib/types/rest/tinkoff/sign-up";
+import { ApiConfirmTypes } from "../../../../lib/types/rest/tinkoff/confirm";
+import { ICommonSchema } from "../utils";
+
+const defaultMaxStringLength = 50;
 
 const schemaIApiCommonQuery: ObjectKeysValidation<IApiCommonQuery> = {
-    session: { type: 'string', maxLength: 100 }
+    session: { type: "string", maxLength: defaultMaxStringLength },
 };
 
-interface ISchemaApiSignUp {
-    query: ObjectKeysValidation<IApiSignUpQuery>;
-    body: ObjectKeysValidation<IApiSignUpBody>;
-}
-
-export const schemaIApiSignUp: ISchemaApiSignUp = {
+export const schemaIApiSignUp: ICommonSchema<ApiSignUpTypes.IQuery, ApiSignUpTypes.IBody> = {
     query: {
-        ...schemaIApiCommonQuery
+        ...schemaIApiCommonQuery,
     },
     body: {
-        username: { type: 'string', maxLength: 100 },
-        password: { type: 'string', maxLength: 100 },
-    }
+        username: { type: "string", maxLength: defaultMaxStringLength },
+        password: { type: "string", maxLength: defaultMaxStringLength },
+    },
+};
+
+export const schemaIApiConfirm: ICommonSchema<ApiConfirmTypes.IQuery, ApiConfirmTypes.IBody> = {
+    query: {
+        ...schemaIApiCommonQuery,
+    },
+    body: {
+        operationalTicket: { type: "string", maxLength: defaultMaxStringLength },
+        smsId: { type: "string", maxLength: 4, minLength: 4 },
+    },
 };
