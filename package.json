@@ -5,37 +5,21 @@
     "main": "index.js",
     "scripts": {
         "dev-client": "parcel serve src/client/index.html -p 8080 --open -d dev-dist",
+        "build-client": "parcel build src/client/index.html -d client-bundle --no-source-maps --detailed-report ",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/Rhymmor/tinkoff-budget.git"
-    },
-    "keywords": [
-        "tinkoff",
-        "budget",
-        "finance"
-    ],
-    "author": {
-        "name": "Anatoly Belonog",
-        "email": "anatolybelonog@gmail.com",
-        "url": "https://github.com/Rhymmor"
-    },
-    "license": "MIT",
-    "bugs": {
-        "url": "https://github.com/Rhymmor/tinkoff-budget/issues"
-    },
-    "homepage": "https://github.com/Rhymmor/tinkoff-budget#readme",
     "dependencies": {
         "fastify": "1.14.1",
         "react": "16.8.6",
         "react-dom": "16.8.6",
+        "react-router-dom": "5.0.0",
         "tinkoff-api": "0.0.4"
     },
     "devDependencies": {
         "@types/node": "11.9.0",
         "@types/react": "16.8.10",
         "@types/react-dom": "16.8.3",
+        "@types/react-router-dom": "4.3.1",
         "husky": "1.3.1",
         "lint-staged": "8.1.3",
         "parcel-bundler": "1.12.3",
@@ -55,5 +39,24 @@
             "prettier --write",
             "git add"
         ]
-    }
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/Rhymmor/tinkoff-budget.git"
+    },
+    "keywords": [
+        "tinkoff",
+        "budget",
+        "finance"
+    ],
+    "author": {
+        "name": "Anatoly Belonog",
+        "email": "anatolybelonog@gmail.com",
+        "url": "https://github.com/Rhymmor"
+    },
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/Rhymmor/tinkoff-budget/issues"
+    },
+    "homepage": "https://github.com/Rhymmor/tinkoff-budget#readme"
 }

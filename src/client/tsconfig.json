@@ -1,0 +1,10 @@
+{
+    "compilerOptions": {
+        "target": "es2018",
+        "sourceMap": true,
+        "module": "esnext",
+        "jsx": "preserve",
+        "lib": ["esnext"]
+    },
+    "references": [{ "path": "../.." }]
+}

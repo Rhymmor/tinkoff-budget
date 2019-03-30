@@ -6,3 +6,4 @@ env/
 dist/
 .cache/
 dev-dist/
+client-bundle/
