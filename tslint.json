@@ -1,9 +1,6 @@
 {
     "defaultSeverity": "error",
-    "extends": [
-        "tslint:recommended",
-        "tslint-config-airbnb"
-    ],
+    "extends": ["tslint:recommended", "tslint-config-airbnb"],
     "jsRules": {},
     "rules": {
         "ter-indent": 4,
@@ -18,7 +15,8 @@
         "align": false,
         "object-curly-spacing": false,
         "variable-name": [true, "ban-keywords", "check-format", "allow-leading-underscore"],
-        "indent": [true]
+        "indent": [true],
+        "import-name": false
     },
     "rulesDirectory": []
 }
