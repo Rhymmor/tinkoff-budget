@@ -1,6 +1,6 @@
 {
     "defaultSeverity": "error",
-    "extends": ["tslint:recommended", "tslint-config-airbnb"],
+    "extends": ["tslint:recommended", "tslint-config-airbnb", "tslint-config-prettier"],
     "jsRules": {},
     "rules": {
         "ter-indent": 4,
@@ -18,7 +18,7 @@
         "indent": [true],
         "import-name": false,
         "member-ordering": false,
-        "function-name": [true, { "function-regex": "^[a-zA-Z][\\w\\d]+$" }]
+        "function-name": [true, { "function-regex": "^[a-zA-Z][\\w\\d]+$", "static-method-regex": "^[A-Z][\\w\\d]+$" }]
     },
     "rulesDirectory": []
 }
