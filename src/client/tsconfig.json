@@ -8,6 +8,7 @@
         "jsx": "preserve",
         "lib": ["esnext"],
         "moduleResolution": "node",
+        "experimentalDecorators": true,
 
         "strict": true,
         /* Additional Checks */
@@ -16,6 +17,7 @@
         "noImplicitReturns": true,
         "noFallthroughCasesInSwitch": true,
         "composite": true,
-        "include": ["../lib"]
-    }
+        "esModuleInterop": true
+    },
+    "include": ["../lib"]
 }
