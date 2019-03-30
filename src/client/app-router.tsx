@@ -7,18 +7,16 @@ const LazyLogin = React.lazy(() => import("./pages/login").then(x => ({ default:
 export function AppRouter() {
     return (
         <BrowserRouter>
-            <div>
-                <Route
-                    exact
-                    path="/login"
-                    render={() => (
-                        <SuspenseWrapper>
-                            <LazyLogin />
-                        </SuspenseWrapper>
-                    )}
-                />
-                <Route exact path="/" render={() => <Redirect to="/login" />} />
-            </div>
+            <Route
+                exact
+                path="/login"
+                render={() => (
+                    <SuspenseWrapper>
+                        <LazyLogin />
+                    </SuspenseWrapper>
+                )}
+            />
+            <Route exact path="/" render={() => <Redirect to="/login" />} />
         </BrowserRouter>
     );
 }

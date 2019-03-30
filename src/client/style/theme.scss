@@ -1,0 +1,34 @@
+
+.ui.segments {
+    &.compact {
+        border: none;
+        box-shadow: none;
+        >.ui.segment {
+            border: none;
+            box-shadow: none;
+        }
+    }
+}
+.ui.segment {
+    background-color: transparent;
+}
+
+.ui.button.yellow {
+    background-color: #ffdd2d;
+    color: #000;
+}
+
+.dark.ui.input {
+    >input {
+        background-color: #5d697b;
+        color: #fff;
+        &::placeholder {
+            color: #aaa;
+        }
+        &:focus {
+            background-color: #fff;
+            color: #000;
+            transition: .3s;
+        }
+    }
+}
