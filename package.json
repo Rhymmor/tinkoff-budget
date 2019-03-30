@@ -4,8 +4,8 @@
     "description": "Tinkoff budget planning",
     "main": "index.js",
     "scripts": {
-        "dev-client": "parcel serve src/client/index.html -p 8080 --open -d dev-dist",
-        "build-client": "parcel build src/client/index.html -d client-bundle --no-source-maps --detailed-report ",
+        "dev-client": "parcel serve src/client/index.html -p 8080 --open -d dev-dist --no-autoinstall",
+        "build-client": "parcel build src/client/index.html -d client-bundle --no-source-maps --detailed-report --no-autoinstall",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "dependencies": {
@@ -13,6 +13,8 @@
         "react": "16.8.6",
         "react-dom": "16.8.6",
         "react-router-dom": "5.0.0",
+        "semantic-ui-css": "2.4.1",
+        "semantic-ui-react": "0.86.0",
         "tinkoff-api": "0.0.4"
     },
     "devDependencies": {
