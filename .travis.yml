@@ -1,4 +1,4 @@
-language: ruby
+language: minimal
 
 services:
   - docker
@@ -10,10 +10,7 @@ script:
 deploy:
   skip_cleanup: true
   provider: script
-  script:
-    - docker images
-    - docker tag tinkoff-budget $DOCKER_USERNAME/tinkoff-budget
-    - docker push $DOCKER_USERNAME/tinkoff-budget
+  script: scripts/deploy_docker.sh
 
 env:
   matrix:
