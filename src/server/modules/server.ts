@@ -1,11 +1,11 @@
-import fastify = require('fastify');
-import { registerTinkoffRouter } from '../rest/routers/tinkoff/router';
+import fastify = require("fastify");
+import { registerTinkoffRouter } from "../rest/routers/tinkoff/router";
 
 export class Server {
     private app: fastify.FastifyInstance;
     private port: string;
 
-    constructor(port = '8000') {
+    constructor(port = "3000") {
         this.port = port;
         this.app = this.initializeApp();
     }
@@ -17,10 +17,10 @@ export class Server {
     private initializeApp(): fastify.FastifyInstance {
         const app = fastify({
             logger: {
-                prettyPrint: process.env.NODE_ENV !== 'production'
+                prettyPrint: process.env.NODE_ENV !== "production"
             }
         });
-        app.register(registerTinkoffRouter, {prefix: '/api'});
+        app.register(registerTinkoffRouter, { prefix: "/api" });
         return app;
     }
 }
