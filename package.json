@@ -52,12 +52,6 @@
             "pre-commit": "lint-staged"
         }
     },
-    "lint-staged": {
-        "*.{js,json,css,md}": [
-            "prettier --write",
-            "git add"
-        ]
-    },
     "repository": {
         "type": "git",
         "url": "git+https://github.com/Rhymmor/tinkoff-budget.git"
