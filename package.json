@@ -5,9 +5,12 @@
     "main": "index.js",
     "sideEffects": false,
     "scripts": {
+        "compile": "tsc",
         "dev-backend": "./scripts/debug-server.sh",
         "dev-client": "node scripts/dev-server.js",
         "build-client": "parcel build src/client/index.html -d client-bundle --no-source-maps --detailed-report --no-autoinstall",
+        "build-server": "npm run compile",
+        "build": "npm run build-server && npm run build-client",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "dependencies": {
