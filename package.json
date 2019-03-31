@@ -3,6 +3,7 @@
     "version": "0.0.1",
     "description": "Tinkoff budget planning",
     "main": "index.js",
+    "sideEffects": false,
     "scripts": {
         "dev-backend": "./scripts/debug-server.sh",
         "dev-client": "node scripts/dev-server.js",
@@ -12,7 +13,7 @@
     "dependencies": {
         "@rematch/core": "1.1.0",
         "axios": "0.18.0",
-        "fastify": "1.14.1",
+        "fastify": "2.1.0",
         "lodash.clonedeep": "4.5.0",
         "loglevel": "1.6.1",
         "react": "16.8.6",
@@ -35,6 +36,7 @@
         "husky": "1.3.1",
         "lint-staged": "8.1.3",
         "parcel-bundler": "1.12.3",
+        "parcel-plugin-bundle-visualiser": "1.2.0",
         "parcel-proxy-server": "1.1.0",
         "pino-pretty": "2.6.0",
         "prettier": "1.16.4",
