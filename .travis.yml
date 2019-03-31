@@ -1,0 +1,21 @@
+language: ruby
+
+services:
+  - docker
+
+script:
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+  - docker build -t tinkoff-budget .
+
+deploy:
+  skip_cleanup: true
+  provider: script
+  script:
+    - docker images
+    - docker tag tinkoff-budget $DOCKER_USERNAME/tinkoff-budget
+    - docker push $DOCKER_USERNAME/tinkoff-budget
+
+env:
+  matrix:
+    - secure: s/GMMKdxsXgN8AXLk8i2VyNUkhVFVY1tmdgn+/MG2GlyzT2qIaeQDcyM3KriedAk9rUYnL2q6T0VB8aoEtQGZMl3Ng2kNHs+b/mualAvETtMHHoh6b8cXVRuGHrhNZHBK81P/iVoXywJyUG3kpIw/xVHgImipOh2HOjD8KQS4CaraKS+WjZ+plqKrfjsrizr716vPzvISSo7bb4vxmVskcfJWB5wjwEkiXrM5DKMD8MjSgu1K9hMF1HU7OEetHy6tPsyb+Cpx4Yqt+n4iY9mqlxy+eB20mm/OAxDTShErlW34ZptDq3DxfDtnb/eeXWWhIVxYJWfqbhGkBXFC5UDik0L6I0bpYFzB6kVfAUiIpCn6/4QwFcP7fu2jWbZSaesQeQi5myV0N2gy9pNi2tlYmGzjns69SNmPIjJ7bUOec4GQbc2qpluKc+zf42+FRQ4b46dHJv8H1xo18Xcv1SkEbD49BDOe489xVfg6/dRfEfLE6wxpmCjckKJB5gFmEhJEVU4uXBL9UEQv5ODPoF5KPmRYiQ2hi6EgK7i97HTjU8iINPGaMx8NnDJ1ZqSYswzEdGrONXKV7id44l4YRA/UX/HxY9C/w7zVUhbjb+jlebRs/vlIzCC2L2HsSWo/06v6rGza1oFS2d+6DuETawP9w/DAt1/t3ZvbwDZpAGMlig=
+    - secure: Y9IOJ9qV5rbeBQ4SbzC6HZyh4Jrd4BbBbZzCybaH9jgHa/tZfQpIWK1yTvRUPwuxVz7nt7xqhyYy1qDK8UVKYuhikpQHeCPS5yMa9XMECkfl/Nwz2jfmS3q6hDPx+cttNh04hvDir/uGH6sEO8uf9Ecu9uCGV7+2GBmqLPYj+n/mWQTtBIfc3tMhn2SEMi40+ObJU7lz8esUZsXxkluz78Y8KJZNixXcbYTGeDB9IP8wwMbIg5TNLu1CKLT/CgfqGnxuDsErpACcDfOFKgtKC/Rh27WJ9LgNQhaUWeP7lfqaA9tWg2VNZZU+QgIXP4Xp8OU6eI5Fb6wfZ0bk++6j8ctut3TGrONueulnJ+od78POE0DVlKZrCIgzH8wp1dtQwwCiuGEEp3OAKFhV7qWPJgiQ3Xn7oUkEZ/t/orxXblsiFoh3gPUK9diqWVbPFe7/YtBJElHUn5rIVpH8xRjHsn8zngfGgPLXQjHTlVwb/W1gkdNy6/5llbdV1IfZ/Aqf46mxUn/P5Q/aCcPTF1KbTtEXHgN2bdb6g4lDjTFWIQDYOAtkNlEZOffgBt2N3U17Ra0cWsbeZcfqQP+SDOntIenjB1kmpzmh1u9dC5hwnn0hWYloLlEz0QCB4Vn8W+smY4OWLhES/zNE6ynlEBmjofbGvvaXXTn4Y4uQljJM4fI=
