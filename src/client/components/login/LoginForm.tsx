@@ -12,6 +12,7 @@ import { connect } from "react-redux";
 interface IDispatchProps {
     changeName: (username: string) => void;
     changePassword: (password: string) => void;
+    initSession: () => Promise<void>;
 }
 
 interface IStateToProps {
@@ -39,11 +40,12 @@ function mapStateToProps({ session: { credentials } }: IStore, _ownProps: IOwnPr
 
 function mapDispatch(store: IStore, _ownProps: IOwnProps): IDispatchProps {
     const {
-        session: { modifyCredentials }
+        session: { modifyCredentials, initSession }
     } = store;
     return {
         changeName: value => modifyCredentials(x => (x.username = value)),
-        changePassword: value => modifyCredentials(x => (x.password = value))
+        changePassword: value => modifyCredentials(x => (x.password = value)),
+        initSession: () => initSession()
     };
 }
 
@@ -51,6 +53,11 @@ class LoginFormImpl extends React.Component<IProps, IState> {
     public readonly state: IState = {
         state: AsyncStoreState.Unknown
     };
+
+    public componentDidMount() {
+        console.log("componentDidMount");
+        this.props.initSession();
+    }
 
     private signUp = () => {
         const {
