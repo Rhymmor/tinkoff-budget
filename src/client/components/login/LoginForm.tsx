@@ -55,7 +55,6 @@ class LoginFormImpl extends React.Component<IProps, IState> {
     };
 
     public componentDidMount() {
-        console.log("componentDidMount");
         this.props.initSession();
     }
 
