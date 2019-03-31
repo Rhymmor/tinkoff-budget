@@ -7,3 +7,4 @@ dist/
 .cache/
 dev-dist/
 client-bundle/
+*.bak

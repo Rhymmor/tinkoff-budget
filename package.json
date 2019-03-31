@@ -5,6 +5,7 @@
     "main": "index.js",
     "scripts": {
         "dev-client": "parcel serve src/client/index.html -p 8080 --open -d dev-dist --no-autoinstall",
+        "dev-client": "node scripts/dev-server.js",
         "build-client": "parcel build src/client/index.html -d client-bundle --no-source-maps --detailed-report --no-autoinstall",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
@@ -32,6 +33,7 @@
         "husky": "1.3.1",
         "lint-staged": "8.1.3",
         "parcel-bundler": "1.12.3",
+        "parcel-proxy-server": "1.1.0",
         "prettier": "1.16.4",
         "sass": "1.17.3",
         "tslint": "5.12.1",
