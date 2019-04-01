@@ -2,5 +2,5 @@
 set -xe
 
 docker images
-docker tag tinkoff-budget $DOCKER_USERNAME/tinkoff-budget
-docker push $DOCKER_USERNAME/tinkoff-budget
+docker tag $1 $2/$1
+docker push $2/$1
