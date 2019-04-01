@@ -1,23 +1,20 @@
 import * as React from "react";
-import { Card, Grid, Segment, Button, Message } from "semantic-ui-react";
-import { StatefulInput } from "../inputs/StatefulInput";
+import { Card, Grid, Segment, Message } from "semantic-ui-react";
 import { ApiLoginUtils } from "../../lib/api/login";
 import { isOk } from "../../../lib/utils";
 import { IStore } from "../../redux/models";
-import { ISessionCredentials } from "../../redux/models/session";
 import { ICredentials } from "../../../lib/types/api";
 import { AsyncStoreState } from "../../redux/models/utils";
 import { connect } from "react-redux";
+import { SignUpStage } from "./SIgnUpStage";
+import { MutatorHelper } from "../../lib/types/utils";
 
 interface IDispatchProps {
-    changeName: (username: string) => void;
-    changePassword: (password: string) => void;
+    changeCredentials: MutatorHelper<Partial<ICredentials>>;
     initSession: () => Promise<void>;
 }
 
-interface IStateToProps {
-    credentials: ISessionCredentials & ICredentials;
-}
+interface IStateToProps {}
 
 interface IOwnProps {}
 
@@ -28,14 +25,8 @@ interface IState {
     error?: string;
 }
 
-function mapStateToProps({ session: { credentials } }: IStore, _ownProps: IOwnProps): IStateToProps {
-    return {
-        credentials: {
-            ...credentials,
-            username: credentials.username || "",
-            password: credentials.password || ""
-        }
-    };
+function mapStateToProps(_store: IStore, _ownProps: IOwnProps): IStateToProps {
+    return {};
 }
 
 function mapDispatch(store: IStore, _ownProps: IOwnProps): IDispatchProps {
@@ -43,8 +34,7 @@ function mapDispatch(store: IStore, _ownProps: IOwnProps): IDispatchProps {
         session: { modifyCredentials, initSession }
     } = store;
     return {
-        changeName: value => modifyCredentials(x => (x.username = value)),
-        changePassword: value => modifyCredentials(x => (x.password = value)),
+        changeCredentials: modifyCredentials,
         initSession: () => initSession()
     };
 }
@@ -54,24 +44,23 @@ class LoginFormImpl extends React.Component<IProps, IState> {
         state: AsyncStoreState.Unknown
     };
 
-    public componentDidMount() {
-        this.props.initSession();
-    }
-
-    private signUp = () => {
-        const {
-            credentials: { username, password }
-        } = this.props;
+    private signUp = ({ username, password }: ICredentials) => {
         this.setState({ state: AsyncStoreState.Loading });
-        return ApiLoginUtils.signUp(username, password)
-            .then(() => this.setState({ state: AsyncStoreState.Success }))
+        return this.props
+            .initSession()
+            .then(() => ApiLoginUtils.signUp(username, password))
+            .then(() => {
+                this.setState({ state: AsyncStoreState.Success });
+                this.props.changeCredentials(x => {
+                    x.username = username;
+                    x.password = password;
+                });
+            })
             .catch(e => this.setState({ state: AsyncStoreState.Failed, error: String(e) }));
     };
 
     public render() {
-        const {
-            credentials: { username, password }
-        } = this.props;
+        const { changeCredentials } = this.props;
         const { state, error } = this.state;
         const isLoading = state === AsyncStoreState.Loading;
         const hasError = state === AsyncStoreState.Failed && isOk(error);
@@ -80,45 +69,19 @@ class LoginFormImpl extends React.Component<IProps, IState> {
                 <Card.Content>
                     <Grid>
                         <Grid.Row centered>
-                            <Segment.Group compact className="full-width">
-                                {hasError && (
-                                    <Segment>
-                                        <Message error>
-                                            <Message.Header>Signing up failed</Message.Header>
-                                            <p>{error}</p>
-                                        </Message>
-                                    </Segment>
-                                )}
+                            {hasError && (
                                 <Segment>
-                                    <StatefulInput
-                                        fluid
-                                        className="dark"
-                                        placeholder="Username"
-                                        value={username}
-                                        onSubmit={this.props.changeName}
-                                    />
+                                    <Message error>
+                                        <Message.Header>Signing up failed</Message.Header>
+                                        <p>{error}</p>
+                                    </Message>
                                 </Segment>
-                                <Segment>
-                                    <StatefulInput
-                                        fluid
-                                        className="dark"
-                                        placeholder="Password"
-                                        value={password}
-                                        onSubmit={this.props.changePassword}
-                                    />
-                                </Segment>
-                                <Segment>
-                                    <Button
-                                        loading={isLoading}
-                                        onClick={this.signUp}
-                                        disabled={isLoading}
-                                        color="yellow"
-                                        floated="right"
-                                    >
-                                        Login
-                                    </Button>
-                                </Segment>
-                            </Segment.Group>
+                            )}
+                            <SignUpStage
+                                loading={isLoading}
+                                signUp={this.signUp}
+                                changeCredentials={changeCredentials}
+                            />
                         </Grid.Row>
                     </Grid>
                 </Card.Content>
