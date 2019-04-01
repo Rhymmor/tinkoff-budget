@@ -28,8 +28,8 @@ export class Server {
 
         const projectRoot = process.env.PROJECT_ROOT || process.cwd();
 
-        app.register(fastifyStatic, { root: path.join(projectRoot, "client-bundle") });
-        app.get("/", (_req, res) => {
+        app.register(fastifyStatic, { root: path.join(projectRoot, "client-bundle"), wildcard: false });
+        app.get("*", (_req, res) => {
             res.sendFile("index.html");
         });
 
