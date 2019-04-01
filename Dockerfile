@@ -3,6 +3,7 @@ WORKDIR /app
 
 FROM base AS dependencies  
 COPY package*.json ./
+COPY npm-*.json ./
 COPY tsconfig.json ./
 RUN npm install
 

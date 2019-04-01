@@ -1,6 +1,11 @@
 #!/bin/sh
 set -xe
 
+name="$1"
+repo="$2"
+remote_name="${3:-$1}"
+remote="$repo/$remote_name"
+
 docker images
-docker tag $1 $2/$1
-docker push $2/$1
+docker tag $name $remote
+docker push $remote
