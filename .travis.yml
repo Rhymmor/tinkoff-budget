@@ -20,7 +20,7 @@ deploy:
     skip_cleanup: true
   - provider: script
     script: 
-      sh scripts/deploy_docker.sh $APP_NAME registry.heroku.com $APP_NAME/web
+      sh scripts/deploy_docker.sh $APP_NAME registry.heroku.com $APP_NAME/web && 
       heroku container:release web --app $APP_NAME
     skip_cleanup: true
 
