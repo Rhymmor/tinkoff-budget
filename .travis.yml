@@ -10,7 +10,7 @@ script:
 deploy:
   skip_cleanup: true
   provider: script
-  script: scripts/deploy_docker.sh
+  script: sh scripts/deploy_docker.sh
 
 env:
   matrix:
