@@ -716,6 +716,12 @@
             "from": "@types/caseless@*",
             "resolved": "https://registry.npmjs.org/@types/caseless/-/caseless-0.12.2.tgz"
         },
+        "@types/classnames": {
+            "version": "2.2.7",
+            "from": "@types/classnames",
+            "resolved": "https://registry.npmjs.org/@types/classnames/-/classnames-2.2.7.tgz",
+            "dev": true
+        },
         "@types/form-data": {
             "version": "2.2.1",
             "from": "@types/form-data@*",
@@ -1521,7 +1527,7 @@
         },
         "classnames": {
             "version": "2.2.6",
-            "from": "classnames@^2.2.6",
+            "from": "https://registry.npmjs.org/classnames/-/classnames-2.2.6.tgz",
             "resolved": "https://registry.npmjs.org/classnames/-/classnames-2.2.6.tgz"
         },
         "cli-cursor": {
