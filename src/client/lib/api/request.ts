@@ -9,13 +9,12 @@ const service = new Service(axios);
 export { request };
 
 export function setRequestMiddleware(modify?: (cfg: AxiosRequestConfig) => AxiosRequestConfig) {
+    service.reset();
     if (modify) {
         service.register({
             onRequest(config: AxiosRequestConfig) {
                 return modify(config);
             }
         });
-    } else {
-        service.reset();
     }
 }

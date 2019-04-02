@@ -3,10 +3,11 @@ import { ICredentials } from "../../../lib/types/api";
 import { Mutator } from "../../lib/types/utils";
 import { mutate } from "../../lib/utils";
 import { ApiSessionUtils } from "../../lib/api/login";
-import { IStore } from ".";
 import { logger } from "../../lib/logger";
 import { setRequestMiddleware } from "../../lib/api/request";
 import { IApiCommonQuery } from "../../../lib/types/rest/tinkoff/common";
+import { IStore } from ".";
+import { isOk } from "../../../lib/utils";
 
 export interface ISessionStore {
     session: ISessionIdStore;
@@ -37,7 +38,11 @@ export const sessionModel = {
         }
     },
     effects: (dispatch: any) => ({
-        initSession: (_force = false) => {
+        initSession: (force = false, rootStore?: IStore) => {
+            if (!force && rootStore && isOk(rootStore.session.session.sessionId)) {
+                return Promise.resolve();
+            }
+
             dispatch.session.modifySessionId((store: ISessionIdStore) => {
                 store.state = AsyncStoreState.Loading;
             });
