@@ -1,6 +1,7 @@
 import { safeGet, isOk } from "../../../lib/utils";
 import * as React from "react";
-import { Input } from "semantic-ui-react";
+import { Input, SemanticSIZES } from "semantic-ui-react";
+import { logger } from "../../lib/logger";
 
 type ReactEvent = React.FormEvent;
 
@@ -20,6 +21,7 @@ export interface IStatefulInputProps<T> {
     autoFocus?: boolean;
     tabIndex?: number;
     fluid?: boolean;
+    size?: Exclude<SemanticSIZES, "tiny" | "medium">;
 }
 
 interface IState {
@@ -75,7 +77,18 @@ export class StatefulInput<T> extends React.Component<IStatefulInputProps<T>, IS
     };
 
     public render() {
-        const { type, className, validator, placeholder, onClick, title, autoFocus, tabIndex, fluid } = this.props;
+        const {
+            type,
+            className,
+            validator,
+            placeholder,
+            onClick,
+            title,
+            autoFocus,
+            tabIndex,
+            fluid,
+            size
+        } = this.props;
         const { text } = this.state;
 
         let error = false;
@@ -83,7 +96,7 @@ export class StatefulInput<T> extends React.Component<IStatefulInputProps<T>, IS
             try {
                 error = validator(text);
             } catch (e) {
-                console.error(e);
+                logger.error(e);
             }
         }
 
@@ -102,6 +115,7 @@ export class StatefulInput<T> extends React.Component<IStatefulInputProps<T>, IS
                 onClick={onClick}
                 tabIndex={tabIndex}
                 fluid={fluid}
+                size={size}
             />
         );
     }
