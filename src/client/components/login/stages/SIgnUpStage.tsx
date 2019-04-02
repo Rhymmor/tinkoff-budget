@@ -1,13 +1,12 @@
 import * as React from "react";
 import { Segment, Button } from "semantic-ui-react";
-import { StatefulInput } from "../inputs/StatefulInput";
-import { ICredentials } from "../../../lib/types/api";
-import { MutatorHelper } from "../../lib/types/utils";
+import { StatefulInput } from "../../inputs/StatefulInput";
+import { ICredentials } from "../../../../lib/types/api";
+import { Flex } from "../../layout/Flex";
 
 interface IProps {
     signUp: (credentials: ICredentials) => Promise<void>;
     loading: boolean;
-    changeCredentials: MutatorHelper<Partial<ICredentials>>;
 }
 
 interface IState {
@@ -38,24 +37,24 @@ export class SignUpStage extends React.Component<IProps, IState> {
         const { loading } = this.props;
         const { username, password } = this.state;
         return (
-            <Segment.Group compact className="full-width">
+            <>
                 <Segment>
-                    <StatefulInput
-                        fluid
-                        className="dark"
-                        placeholder="Username"
-                        value={username}
-                        onSubmit={this.changeName}
-                    />
-                </Segment>
-                <Segment>
-                    <StatefulInput
-                        fluid
-                        className="dark"
-                        placeholder="Password"
-                        value={password}
-                        onSubmit={this.changePassword}
-                    />
+                    <Flex align="center" direction="column" className="login-form__inputs">
+                        <StatefulInput
+                            fluid
+                            className="dark padding-bottom"
+                            placeholder="Username"
+                            value={username}
+                            onSubmit={this.changeName}
+                        />
+                        <StatefulInput
+                            fluid
+                            className="dark padding-top"
+                            placeholder="Password"
+                            value={password}
+                            onSubmit={this.changePassword}
+                        />
+                    </Flex>
                 </Segment>
                 <Segment>
                     <Button
@@ -68,7 +67,7 @@ export class SignUpStage extends React.Component<IProps, IState> {
                         Login
                     </Button>
                 </Segment>
-            </Segment.Group>
+            </>
         );
     }
 }
