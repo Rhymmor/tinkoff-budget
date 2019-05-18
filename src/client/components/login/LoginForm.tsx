@@ -2,52 +2,30 @@ import * as React from "react";
 import { Card, Grid, Segment, Message } from "semantic-ui-react";
 import { ApiLoginUtils } from "../../lib/api/login";
 import { isOk } from "../../../lib/utils";
-import { IStore } from "../../redux/models";
 import { ICredentials } from "../../../lib/types/api";
 import { AsyncStoreState } from "../../redux/models/utils";
-import { connect } from "react-redux";
 import { SignUpStage } from "./stages/SIgnUpStage";
-import { MutatorHelper } from "../../lib/types/utils";
-import { LoginStage } from "./constants";
 import { ConfirmStage } from "./stages/ConfirmStage";
 import { logger } from "../../lib/logger";
+import { MutatorHelper } from "../../lib/types/utils";
+import { LoginLevel } from "../../lib/types/login";
 
-interface IDispatchProps {
-    changeCredentials: MutatorHelper<Partial<ICredentials>>;
+interface IProps {
     initSession: (force?: boolean) => Promise<void>;
+    saveCredentials: MutatorHelper<Partial<ICredentials>>;
+    level: LoginLevel;
+    setLevel: (level: LoginLevel) => void;
 }
-
-interface IStateToProps {}
-
-interface IOwnProps {}
-
-interface IProps extends IStateToProps, IOwnProps, IDispatchProps {}
 
 interface IState {
     state: AsyncStoreState;
     error?: string;
-    stage: LoginStage;
     operationalTicket?: string;
 }
 
-function mapStateToProps(_store: IStore, _ownProps: IOwnProps): IStateToProps {
-    return {};
-}
-
-function mapDispatch(store: IStore, _ownProps: IOwnProps): IDispatchProps {
-    const {
-        session: { modifyCredentials, initSession }
-    } = store;
-    return {
-        changeCredentials: modifyCredentials,
-        initSession: (force = false) => initSession(force)
-    };
-}
-
-class LoginFormImpl extends React.Component<IProps, IState> {
+export class LoginForm extends React.Component<IProps, IState> {
     public readonly state: IState = {
-        state: AsyncStoreState.Unknown,
-        stage: LoginStage.Signup
+        state: AsyncStoreState.Unknown
     };
 
     private signUp = ({ username, password }: ICredentials) => {
@@ -57,8 +35,9 @@ class LoginFormImpl extends React.Component<IProps, IState> {
             .initSession()
             .then(() => ApiLoginUtils.signUp(username, password))
             .then(({ data: { operationalTicket } }) => {
-                this.setState({ operationalTicket, state: AsyncStoreState.Success, stage: LoginStage.Confirm });
-                this.props.changeCredentials(x => {
+                this.setState({ operationalTicket, state: AsyncStoreState.Success });
+                this.props.setLevel(LoginLevel.Candidate);
+                this.props.saveCredentials(x => {
                     x.username = username;
                     x.password = password;
                 });
@@ -75,6 +54,7 @@ class LoginFormImpl extends React.Component<IProps, IState> {
         return ApiLoginUtils.confirm(smsPin, operationalTicket)
             .then(() => {
                 this.setState({ state: AsyncStoreState.Success });
+                this.props.setLevel(LoginLevel.User);
             })
             .catch(e => this.setErrorState(e));
     };
@@ -84,20 +64,21 @@ class LoginFormImpl extends React.Component<IProps, IState> {
         this.setState({ state: AsyncStoreState.Failed, error: String(e) });
     };
 
-    private renderStage = (stage: LoginStage) => {
+    private renderStage = (stage: LoginLevel) => {
         const { state } = this.state;
         const isLoading = state === AsyncStoreState.Loading;
-        if (stage === LoginStage.Signup) {
+        if (stage === LoginLevel.Anon) {
             return <SignUpStage loading={isLoading} signUp={this.signUp} />;
         }
-        if (stage === LoginStage.Confirm) {
+        if (stage === LoginLevel.Candidate) {
             return <ConfirmStage loading={isLoading} confirmSignUp={this.confirmSignUp} />;
         }
         return null;
     };
 
     public render() {
-        const { state, error, stage } = this.state;
+        const { level } = this.props;
+        const { error, state } = this.state;
         const hasError = state === AsyncStoreState.Failed && isOk(error);
         return (
             <Card centered fluid className="login-form">
@@ -113,7 +94,7 @@ class LoginFormImpl extends React.Component<IProps, IState> {
                                         </Message>
                                     </Segment>
                                 )}
-                                {this.renderStage(stage)}
+                                {this.renderStage(level)}
                             </Segment.Group>
                         </Grid.Row>
                     </Grid>
@@ -122,8 +103,3 @@ class LoginFormImpl extends React.Component<IProps, IState> {
         );
     }
 }
-
-export const LoginForm = connect<IStateToProps, IDispatchProps, IOwnProps, IStore>(
-    mapStateToProps,
-    mapDispatch as any
-)(LoginFormImpl);

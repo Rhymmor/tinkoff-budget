@@ -2,7 +2,7 @@ import * as React from "react";
 import { Route, BrowserRouter, Redirect } from "react-router-dom";
 import { SuspenseWrapper } from "./components/layout/SuspenseWrapper";
 import { Provider } from "react-redux";
-import { store } from "./redux/models";
+import { store } from "./redux/store";
 
 const LazyLogin = React.lazy(() => import("./pages/login").then(x => ({ default: x.LoginPage })));
 
