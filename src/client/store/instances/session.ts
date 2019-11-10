@@ -4,7 +4,6 @@ import { isOk } from "../../../lib/utils";
 import { ApiSessionUtils, ApiLoginUtils } from "../../lib/api/login";
 import { IApiCommonQuery } from "../../../lib/types/rest/tinkoff/common";
 import { setRequestMiddleware } from "../../lib/api/request";
-import { logger } from "../../lib/logger";
 import { ICredentials } from "../../../lib/types/api";
 import { injectable } from "inversify";
 import { AsyncStateStore } from "./async-state";
@@ -38,12 +37,12 @@ export class SessionStore {
                 return cfg;
             });
 
-            this.setSessionId(session);
+            this.sessionId = session;
+            this.asyncStore.setSuccess();
         } catch (e) {
-            logger.error(e);
             setRequestMiddleware(undefined);
-            this.asyncStore.setPending();
-            this.setSessionError(e);
+            this.sessionId = undefined;
+            this.asyncStore.setFailed(e);
         }
     }
 
@@ -65,13 +64,16 @@ export class SessionStore {
         }
     }
 
-    private setSessionId(id: string) {
-        this.sessionId = id;
-        this.asyncStore.setSuccess();
-    }
-
-    private setSessionError(error: any) {
-        this.sessionId = undefined;
-        this.asyncStore.setFailed(error);
+    public async confirmSignUp(smsPin: string) {
+        if (!this.operationalTicket) {
+            return this.asyncStore.setFailed("No operational ticket. Try sign up again");
+        }
+        try {
+            await ApiLoginUtils.confirm(smsPin, this.operationalTicket);
+            this.asyncStore.setSuccess();
+            this.level = LoginLevel.User;
+        } catch (e) {
+            this.asyncStore.setFailed(e);
+        }
     }
 }

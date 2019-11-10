@@ -1,11 +1,9 @@
 import * as React from "react";
 import { Card, Grid, Segment, Message } from "semantic-ui-react";
-import { ApiLoginUtils } from "../../lib/api/login";
 import { ICredentials } from "../../../lib/types/api";
 import { AsyncStoreState } from "../../store/utils";
 import { SignUpStage } from "./stages/SIgnUpStage";
 import { ConfirmStage } from "./stages/ConfirmStage";
-import { logger } from "../../lib/logger";
 import { LoginLevel } from "../../lib/types/login";
 import { StoreTypes, IStore } from "../../store/types";
 import { lazyInject } from "../../store/inject";
@@ -21,31 +19,9 @@ export class LoginForm extends React.Component<IProps, IState> {
     private readonly session!: IStore[StoreTypes.Session];
 
     private signUp = async ({ username, password }: ICredentials) => {
-        this.setState({ state: AsyncStoreState.Loading });
-
-        // this.session.session.level = LoginLevel.Candidate;
-
         await this.session.init();
         this.session.credentials = { username, password };
         await this.session.signUp();
-    };
-
-    private confirmSignUp = (smsPin: string) => {
-        const { operationalTicket } = this.session;
-        if (!operationalTicket) {
-            return this.setErrorState("No operational ticket. Try sign up again");
-        }
-        return ApiLoginUtils.confirm(smsPin, operationalTicket)
-            .then(() => {
-                this.setState({ state: AsyncStoreState.Success });
-                this.session.level = LoginLevel.User;
-            })
-            .catch(e => this.setErrorState(e));
-    };
-
-    private setErrorState = (e: any) => {
-        logger.error({ e });
-        this.setState({ state: AsyncStoreState.Failed, error: String(e) });
     };
 
     private renderStage = (stage: LoginLevel) => {
@@ -55,7 +31,7 @@ export class LoginForm extends React.Component<IProps, IState> {
             return <SignUpStage loading={isLoading} signUp={this.signUp} />;
         }
         if (stage === LoginLevel.Candidate) {
-            return <ConfirmStage loading={isLoading} confirmSignUp={this.confirmSignUp} />;
+            return <ConfirmStage loading={isLoading} confirmSignUp={this.session.confirmSignUp} />;
         }
         return null;
     };
