@@ -30,6 +30,7 @@ async function signUp(
 async function confirmSignUp(
     { query, body }: IRequest<ApiConfirmTypes.IQuery, ApiConfirmTypes.IBody>,
     _res: IResponse
-): Promise<void> {
+): Promise<null> {
     await TinkoffApiManager.get().confirmSignUp(query.session, body.operationalTicket, body.smsId);
+    return null;
 }

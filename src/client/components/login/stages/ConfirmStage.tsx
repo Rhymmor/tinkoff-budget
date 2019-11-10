@@ -27,7 +27,7 @@ export class ConfirmStage extends React.Component<IProps, IState> {
     public render() {
         const { loading } = this.props;
         const { smsPin } = this.state;
-        const isConfirmDisabled = loading || this.isPinValid(smsPin);
+        const isConfirmDisabled = loading || !this.isPinValid(smsPin);
         return (
             <>
                 <Segment>

@@ -1,60 +1,44 @@
 import * as React from "react";
 import { Card, Grid, Segment, Message } from "semantic-ui-react";
 import { ApiLoginUtils } from "../../lib/api/login";
-import { isOk } from "../../../lib/utils";
 import { ICredentials } from "../../../lib/types/api";
-import { AsyncStoreState } from "../../redux/models/utils";
+import { AsyncStoreState } from "../../store/utils";
 import { SignUpStage } from "./stages/SIgnUpStage";
 import { ConfirmStage } from "./stages/ConfirmStage";
 import { logger } from "../../lib/logger";
-import { MutatorHelper } from "../../lib/types/utils";
 import { LoginLevel } from "../../lib/types/login";
+import { StoreTypes, IStore } from "../../store/types";
+import { lazyInject } from "../../store/inject";
+import { observer } from "mobx-react";
 
-interface IProps {
-    initSession: (force?: boolean) => Promise<void>;
-    saveCredentials: MutatorHelper<Partial<ICredentials>>;
-    level: LoginLevel;
-    setLevel: (level: LoginLevel) => void;
-}
+interface IProps {}
 
-interface IState {
-    state: AsyncStoreState;
-    error?: string;
-    operationalTicket?: string;
-}
+interface IState {}
 
+@observer
 export class LoginForm extends React.Component<IProps, IState> {
-    public readonly state: IState = {
-        state: AsyncStoreState.Unknown
-    };
+    @lazyInject(StoreTypes.Session)
+    private readonly session!: IStore[StoreTypes.Session];
 
-    private signUp = ({ username, password }: ICredentials) => {
+    private signUp = async ({ username, password }: ICredentials) => {
         this.setState({ state: AsyncStoreState.Loading });
 
-        return this.props
-            .initSession()
-            .then(() => ApiLoginUtils.signUp(username, password))
-            .then(({ data: { operationalTicket } }) => {
-                this.setState({ operationalTicket, state: AsyncStoreState.Success });
-                this.props.setLevel(LoginLevel.Candidate);
-                this.props.saveCredentials(x => {
-                    x.username = username;
-                    x.password = password;
-                });
-            })
-            .catch(e => this.setErrorState(e));
+        // this.session.session.level = LoginLevel.Candidate;
+
+        await this.session.init();
+        this.session.credentials = { username, password };
+        await this.session.signUp();
     };
 
     private confirmSignUp = (smsPin: string) => {
-        const { operationalTicket } = this.state;
+        const { operationalTicket } = this.session;
         if (!operationalTicket) {
             return this.setErrorState("No operational ticket. Try sign up again");
         }
-        this.setState({ state: AsyncStoreState.Loading });
         return ApiLoginUtils.confirm(smsPin, operationalTicket)
             .then(() => {
                 this.setState({ state: AsyncStoreState.Success });
-                this.props.setLevel(LoginLevel.User);
+                this.session.level = LoginLevel.User;
             })
             .catch(e => this.setErrorState(e));
     };
@@ -65,7 +49,7 @@ export class LoginForm extends React.Component<IProps, IState> {
     };
 
     private renderStage = (stage: LoginLevel) => {
-        const { state } = this.state;
+        const { state } = this.session.asyncStore;
         const isLoading = state === AsyncStoreState.Loading;
         if (stage === LoginLevel.Anon) {
             return <SignUpStage loading={isLoading} signUp={this.signUp} />;
@@ -77,20 +61,18 @@ export class LoginForm extends React.Component<IProps, IState> {
     };
 
     public render() {
-        const { level } = this.props;
-        const { error, state } = this.state;
-        const hasError = state === AsyncStoreState.Failed && isOk(error);
+        const { level, asyncStore } = this.session;
         return (
             <Card centered fluid className="login-form">
                 <Card.Content>
                     <Grid>
                         <Grid.Row centered>
                             <Segment.Group compact className="full-width">
-                                {hasError && (
+                                {asyncStore.hasError && (
                                     <Segment>
                                         <Message error>
                                             <Message.Header>Signing up failed</Message.Header>
-                                            <p>{error}</p>
+                                            <p>{asyncStore.error}</p>
                                         </Message>
                                     </Segment>
                                 )}
