@@ -1,4 +1,4 @@
-import { SessionStore } from "./session";
+import { SessionStore } from "./instances/session";
 
 export enum StoreTypes {
     Session = "Session"

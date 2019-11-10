@@ -1,6 +1,6 @@
 import "reflect-metadata";
 import { Container } from "inversify";
-import { SessionStore } from "./session";
+import { SessionStore } from "./instances/session";
 import { setContainer } from "./inject";
 import { StoreTypes } from "./types";
 
