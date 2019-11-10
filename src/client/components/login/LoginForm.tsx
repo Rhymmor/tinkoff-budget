@@ -1,7 +1,6 @@
 import * as React from "react";
 import { Card, Grid, Segment, Message } from "semantic-ui-react";
 import { ApiLoginUtils } from "../../lib/api/login";
-import { isOk } from "../../../lib/utils";
 import { ICredentials } from "../../../lib/types/api";
 import { AsyncStoreState } from "../../store/utils";
 import { SignUpStage } from "./stages/SIgnUpStage";
@@ -32,14 +31,14 @@ export class LoginForm extends React.Component<IProps, IState> {
     };
 
     private confirmSignUp = (smsPin: string) => {
-        const { operationalTicket } = this.session.ticket;
+        const { operationalTicket } = this.session;
         if (!operationalTicket) {
             return this.setErrorState("No operational ticket. Try sign up again");
         }
         return ApiLoginUtils.confirm(smsPin, operationalTicket)
             .then(() => {
                 this.setState({ state: AsyncStoreState.Success });
-                this.session.session.level = LoginLevel.User;
+                this.session.level = LoginLevel.User;
             })
             .catch(e => this.setErrorState(e));
     };
@@ -50,7 +49,7 @@ export class LoginForm extends React.Component<IProps, IState> {
     };
 
     private renderStage = (stage: LoginLevel) => {
-        const { state } = this.session.ticket;
+        const { state } = this.session.asyncStore;
         const isLoading = state === AsyncStoreState.Loading;
         if (stage === LoginLevel.Anon) {
             return <SignUpStage loading={isLoading} signUp={this.signUp} />;
@@ -62,20 +61,18 @@ export class LoginForm extends React.Component<IProps, IState> {
     };
 
     public render() {
-        const { level } = this.session.session;
-        const { error, state } = this.session.ticket;
-        const hasError = state === AsyncStoreState.Failed && isOk(error);
+        const { level, asyncStore } = this.session;
         return (
             <Card centered fluid className="login-form">
                 <Card.Content>
                     <Grid>
                         <Grid.Row centered>
                             <Segment.Group compact className="full-width">
-                                {hasError && (
+                                {asyncStore.hasError && (
                                     <Segment>
                                         <Message error>
                                             <Message.Header>Signing up failed</Message.Header>
-                                            <p>{error}</p>
+                                            <p>{asyncStore.error}</p>
                                         </Message>
                                     </Segment>
                                 )}
