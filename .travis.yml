@@ -18,11 +18,15 @@ deploy:
   - provider: script
     script: sh scripts/deploy_docker.sh $APP_NAME "$DOCKER_USERNAME"
     skip_cleanup: true
+    on:
+      branch: master
   - provider: script
     script: 
       sh scripts/deploy_docker.sh $APP_NAME registry.heroku.com $APP_NAME/web && 
       heroku container:release web --app $APP_NAME
     skip_cleanup: true
+    on:
+      branch: master
 
 env:
   global:

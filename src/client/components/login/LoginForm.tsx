@@ -1,7 +1,6 @@
 import * as React from "react";
 import { Card, Grid, Segment, Message } from "semantic-ui-react";
 import { ICredentials } from "../../../lib/types/api";
-import { AsyncStoreState } from "../../store/utils";
 import { SignUpStage } from "./stages/SIgnUpStage";
 import { ConfirmStage } from "./stages/ConfirmStage";
 import { LoginLevel } from "../../lib/types/login";
@@ -25,13 +24,11 @@ export class LoginForm extends React.Component<IProps, IState> {
     };
 
     private renderStage = (stage: LoginLevel) => {
-        const { state } = this.session.asyncStore;
-        const isLoading = state === AsyncStoreState.Loading;
         if (stage === LoginLevel.Anon) {
-            return <SignUpStage loading={isLoading} signUp={this.signUp} />;
+            return <SignUpStage signUp={this.signUp} />;
         }
         if (stage === LoginLevel.Candidate) {
-            return <ConfirmStage loading={isLoading} confirmSignUp={this.session.confirmSignUp} />;
+            return <ConfirmStage confirmSignUp={this.session.confirmSignUp} />;
         }
         return null;
     };

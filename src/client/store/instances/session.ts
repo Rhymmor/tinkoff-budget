@@ -46,7 +46,7 @@ export class SessionStore {
         }
     }
 
-    public async signUp() {
+    public signUp = async () => {
         try {
             const { username, password } = this.credentials;
             if (!isOk(username) || !isOk(password)) {
@@ -62,9 +62,9 @@ export class SessionStore {
         } catch (e) {
             this.asyncStore.setFailed(e);
         }
-    }
+    };
 
-    public async confirmSignUp(smsPin: string) {
+    public confirmSignUp = async (smsPin: string) => {
         if (!this.operationalTicket) {
             return this.asyncStore.setFailed("No operational ticket. Try sign up again");
         }
@@ -75,5 +75,5 @@ export class SessionStore {
         } catch (e) {
             this.asyncStore.setFailed(e);
         }
-    }
+    };
 }
