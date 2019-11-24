@@ -5,13 +5,12 @@ import { Flex } from "../../layout/Flex";
 import { Formik, FormikErrors } from "formik";
 import { isOk } from "../../../../lib/utils";
 import { Field } from "../../inputs/field";
-import { canSubmit } from "../../../lib/forms/submit";
+import { getSubmitButtonProps } from "../../../lib/forms/submit";
 // tslint:disable-next-line:no-var-requires
 const { Form } = require("formik");
 
 interface IProps {
     signUp: (credentials: ICredentials) => Promise<void>;
-    loading: boolean;
 }
 
 interface IFormState {
@@ -22,8 +21,8 @@ interface IFormState {
 export class SignUpStage extends React.Component<IProps> {
     private static readonly initialValues: IFormState = { username: "", password: "" };
 
-    private clickLogin = (values: IFormState) => {
-        this.props.signUp(values);
+    private onSubmit = (values: IFormState): Promise<any> => {
+        return this.props.signUp(values);
     };
 
     private validate = (values: IFormState): FormikErrors<IFormState> => {
@@ -40,14 +39,13 @@ export class SignUpStage extends React.Component<IProps> {
     };
 
     public render() {
-        const { loading } = this.props;
         return (
             <>
                 <Formik<IFormState>
                     initialValues={SignUpStage.initialValues}
                     initialErrors={this.validate(SignUpStage.initialValues)}
                     validate={this.validate}
-                    onSubmit={this.clickLogin}
+                    onSubmit={this.onSubmit}
                 >
                     {state => (
                         <Form autoComplete="off">
@@ -72,14 +70,7 @@ export class SignUpStage extends React.Component<IProps> {
                                 </Flex>
                             </Segment>
                             <Segment>
-                                <Button
-                                    type="submit"
-                                    loading={loading}
-                                    onClick={state.submitForm}
-                                    disabled={!canSubmit(state) || loading}
-                                    color="yellow"
-                                    floated="right"
-                                >
+                                <Button {...getSubmitButtonProps(state)} type="submit" color="yellow" floated="right">
                                     Login
                                 </Button>
                             </Segment>

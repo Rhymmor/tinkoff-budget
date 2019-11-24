@@ -25,13 +25,11 @@ export class LoginForm extends React.Component<IProps, IState> {
     };
 
     private renderStage = (stage: LoginLevel) => {
-        const { state } = this.session.asyncStore;
-        const isLoading = state === AsyncStoreState.Loading;
         if (stage === LoginLevel.Anon) {
-            return <SignUpStage loading={isLoading} signUp={this.signUp} />;
+            return <SignUpStage signUp={this.signUp} />;
         }
         if (stage === LoginLevel.Candidate) {
-            return <ConfirmStage loading={isLoading} confirmSignUp={this.session.confirmSignUp} />;
+            return <ConfirmStage confirmSignUp={this.session.confirmSignUp} />;
         }
         return null;
     };

@@ -2,14 +2,13 @@ import * as React from "react";
 import { Segment, Button } from "semantic-ui-react";
 import { Flex } from "../../layout/Flex";
 import { FormikErrors, Formik } from "formik";
-import { canSubmit } from "../../../lib/forms/submit";
+import { getSubmitButtonProps } from "../../../lib/forms/submit";
 import { Field } from "../../inputs/field";
 // tslint:disable-next-line:no-var-requires
 const { Form } = require("formik");
 
 interface IProps {
     confirmSignUp: (smsPin: string) => Promise<void> | void;
-    loading: boolean;
 }
 
 interface IFormState {
@@ -31,12 +30,11 @@ export class ConfirmStage extends React.Component<IProps> {
         return errors;
     };
 
-    private onSumbit = (values: IFormState) => {
-        this.props.confirmSignUp(values.smsPin);
+    private onSumbit = (values: IFormState): void | Promise<void> => {
+        return this.props.confirmSignUp(values.smsPin);
     };
 
     public render() {
-        const { loading } = this.props;
         return (
             <>
                 <Formik<IFormState>
@@ -46,21 +44,14 @@ export class ConfirmStage extends React.Component<IProps> {
                     onSubmit={this.onSumbit}
                 >
                     {state => (
-                        <Form>
+                        <Form autoComplete="off">
                             <Segment>
                                 <Flex align="center" direction="column" className="login-form__inputs">
                                     <Field fluid className="dark" placeholder="4-digit PIN" size="huge" name="smsPin" />
                                 </Flex>
                             </Segment>
                             <Segment>
-                                <Button
-                                    type="submit"
-                                    loading={loading}
-                                    onClick={state.submitForm}
-                                    disabled={!canSubmit(state) || loading}
-                                    color="yellow"
-                                    floated="right"
-                                >
+                                <Button {...getSubmitButtonProps(state)} type="submit" color="yellow" floated="right">
                                     Confirm
                                 </Button>
                             </Segment>
