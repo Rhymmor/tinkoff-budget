@@ -15,7 +15,7 @@
         "clean": "rm -rf .cache client-bundle dev-dist dist/ build/"
     },
     "dependencies": {
-        "axios": "0.18.0",
+        "axios": "0.18.1",
         "axios-middleware": "0.3.1",
         "classnames": "https://registry.npmjs.org/classnames/-/classnames-2.2.6.tgz",
         "core-js": "https://registry.npmjs.org/core-js/-/core-js-1.2.7.tgz",
