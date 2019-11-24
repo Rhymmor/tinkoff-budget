@@ -5,7 +5,6 @@ import { Flex } from "../../layout/Flex";
 import { Formik, FormikErrors } from "formik";
 import { isOk } from "../../../../lib/utils";
 import { Field } from "../../inputs/field";
-import isEmpty from "lodash/isEmpty";
 import { canSubmit } from "../../../lib/forms/submit";
 // tslint:disable-next-line:no-var-requires
 const { Form } = require("formik");
@@ -21,6 +20,8 @@ interface IFormState {
 }
 
 export class SignUpStage extends React.Component<IProps> {
+    private static readonly initialValues: IFormState = { username: "", password: "" };
+
     private clickLogin = (values: IFormState) => {
         this.props.signUp(values);
     };
@@ -29,7 +30,7 @@ export class SignUpStage extends React.Component<IProps> {
         const errors: FormikErrors<IFormState> = {};
 
         if (!isOk(values.username) || values.username === "") {
-            errors.password = `Username shouldn't be empty`;
+            errors.username = `Username shouldn't be empty`;
         }
         if (!isOk(values.password) || values.password === "") {
             errors.password = `Password shouldn't be empty`;
@@ -43,18 +44,19 @@ export class SignUpStage extends React.Component<IProps> {
         return (
             <>
                 <Formik<IFormState>
-                    initialValues={{ username: "", password: "" }}
+                    initialValues={SignUpStage.initialValues}
+                    initialErrors={this.validate(SignUpStage.initialValues)}
                     validate={this.validate}
                     onSubmit={this.clickLogin}
                 >
                     {state => (
-                        <Form>
+                        <Form autoComplete="off">
                             <Segment>
                                 <Flex align="center" direction="column" className="login-form__inputs">
                                     <Field
                                         fluid
                                         type="text"
-                                        autoComplete="username"
+                                        autoComplete="off"
                                         className="dark padding-bottom"
                                         placeholder="Username"
                                         name="username"
@@ -62,7 +64,7 @@ export class SignUpStage extends React.Component<IProps> {
                                     <Field
                                         fluid
                                         type="password"
-                                        autoComplete="current-password"
+                                        autoComplete="off"
                                         className="dark padding-top"
                                         placeholder="Password"
                                         name="password"
