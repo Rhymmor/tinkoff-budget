@@ -1,7 +1,6 @@
 import * as React from "react";
 import { Card, Grid, Segment, Message } from "semantic-ui-react";
 import { ICredentials } from "../../../lib/types/api";
-import { AsyncStoreState } from "../../store/utils";
 import { SignUpStage } from "./stages/SIgnUpStage";
 import { ConfirmStage } from "./stages/ConfirmStage";
 import { LoginLevel } from "../../lib/types/login";
