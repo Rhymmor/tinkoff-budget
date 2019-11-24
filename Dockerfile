@@ -16,7 +16,6 @@ FROM node:8.9-alpine AS release
 WORKDIR /app
 
 COPY --from=dependencies /app/package.json ./
-# Установить зависимости приложения
 RUN npm install --only=production
 COPY --from=build /app ./
 RUN npm prune --production
