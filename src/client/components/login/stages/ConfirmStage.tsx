@@ -1,59 +1,72 @@
 import * as React from "react";
 import { Segment, Button } from "semantic-ui-react";
-import { StatefulInput } from "../../inputs/StatefulInput";
 import { Flex } from "../../layout/Flex";
+import { FormikErrors, Formik } from "formik";
+import { canSubmit } from "../../../lib/forms/submit";
+import { Field } from "../../inputs/field";
+// tslint:disable-next-line:no-var-requires
+const { Form } = require("formik");
 
 interface IProps {
     confirmSignUp: (smsPin: string) => Promise<void> | void;
     loading: boolean;
 }
 
-interface IState {
+interface IFormState {
     smsPin: string;
 }
 
-export class ConfirmStage extends React.Component<IProps, IState> {
-    public readonly state: IState = {
-        smsPin: ""
-    };
+export class ConfirmStage extends React.Component<IProps> {
+    private static readonly initialValues: IFormState = { smsPin: "" };
 
-    private setPin = (smsPin: string) => this.setState({ smsPin });
     private isPinValid = (smsPin: string) => !!smsPin && smsPin.length === 4;
 
-    private clickConfirm = () => {
-        this.props.confirmSignUp(this.state.smsPin);
+    private validate = (values: IFormState): FormikErrors<IFormState> => {
+        const errors: FormikErrors<IFormState> = {};
+
+        if (!this.isPinValid(values.smsPin)) {
+            errors.smsPin = "PIN should have 4 digits";
+        }
+
+        return errors;
+    };
+
+    private onSumbit = (values: IFormState) => {
+        this.props.confirmSignUp(values.smsPin);
     };
 
     public render() {
         const { loading } = this.props;
-        const { smsPin } = this.state;
-        const isConfirmDisabled = loading || !this.isPinValid(smsPin);
         return (
             <>
-                <Segment>
-                    <Flex align="center" direction="column" className="login-form__inputs">
-                        <StatefulInput
-                            fluid
-                            className="dark"
-                            placeholder="4-digit PIN"
-                            validator={this.isPinValid}
-                            value={smsPin}
-                            onSubmit={this.setPin}
-                            size="huge"
-                        />
-                    </Flex>
-                </Segment>
-                <Segment>
-                    <Button
-                        loading={loading}
-                        onClick={this.clickConfirm}
-                        disabled={isConfirmDisabled}
-                        color="yellow"
-                        floated="right"
-                    >
-                        Confirm
-                    </Button>
-                </Segment>
+                <Formik<IFormState>
+                    initialValues={ConfirmStage.initialValues}
+                    initialErrors={this.validate(ConfirmStage.initialValues)}
+                    validate={this.validate}
+                    onSubmit={this.onSumbit}
+                >
+                    {state => (
+                        <Form>
+                            <Segment>
+                                <Flex align="center" direction="column" className="login-form__inputs">
+                                    <Field fluid className="dark" placeholder="4-digit PIN" size="huge" name="smsPin" />
+                                </Flex>
+                            </Segment>
+                            <Segment>
+                                <Button
+                                    type="submit"
+                                    loading={loading}
+                                    onClick={state.submitForm}
+                                    disabled={!canSubmit(state) || loading}
+                                    color="yellow"
+                                    floated="right"
+                                >
+                                    Confirm
+                                </Button>
+                            </Segment>
+                        </Form>
+                    )}
+                </Formik>
             </>
         );
     }
