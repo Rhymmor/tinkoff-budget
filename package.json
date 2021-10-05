@@ -20,7 +20,7 @@
         "classnames": "https://registry.npmjs.org/classnames/-/classnames-2.2.6.tgz",
         "core-js": "https://registry.npmjs.org/core-js/-/core-js-1.2.7.tgz",
         "fastify": "2.1.0",
-        "fastify-static": "2.4.0",
+        "fastify-static": "4.2.4",
         "formik": "2.0.6",
         "inversify": "https://registry.npmjs.org/inversify/-/inversify-5.0.1.tgz",
         "inversify-inject-decorators": "3.1.0",
